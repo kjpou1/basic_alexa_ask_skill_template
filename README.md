@@ -1,102 +1,85 @@
-# BASIC TEMPLATE
+# BASIC_ALEXA_ASK_SKILL_TEMPLATE
 
-This is a basic python starting template.
-
+This project is a basic template for creating an Alexa skill server using Bottle, ASK SDK, and supporting Gevent for running the server. It also includes environment configuration using dotenv and follows best practices for logging and configuration management.
 
 ## Table of Contents
-
-- [BASIC TEMPLATE](#basic-template)
+- [BASIC\_ALEXA\_ASK\_SKILL\_TEMPLATE](#basic_alexa_ask_skill_template)
   - [Table of Contents](#table-of-contents)
+  - [Important Architectural Notes](#important-architectural-notes)
+    - [Initialization Order](#initialization-order)
   - [Installation](#installation)
-  - [Usage](#usage)
-    - [Command Line Arguments](#command-line-arguments)
-    - [Examples](#examples)
   - [Configuration](#configuration)
-  - [Shell Script](#shell-script)
-    - [Shell Script Examples](#shell-script-examples)
-    - [Running the Shell Script](#running-the-shell-script)
+  - [Running the Server](#running-the-server)
+    - [Running the Server](#running-the-server-1)
+  - [Logging](#logging)
   - [License](#license)
+  - [Contributing](#contributing)
+  - [Contact](#contact)
+
+## Important Architectural Notes
+
+### Initialization Order
+
+To ensure proper initialization of the `JinjaTemplateRenderer` before it is used by any request handlers, the initialization is done in the `Host.__init__` method. This is critical to avoid premature initialization by the request handlers. Any future modifications should honor this initialization order.
+
 
 ## Installation
 
-1. **Clone the repository:**
+1. Clone the repository:
 
-    ```bash
-    git clone https://github.com/yourusername/project_name.git
-    cd project_name
-    ```
+```bash
+git clone https://github.com/kjpou1/BASIC_ALEXA_ASK_SKILL_TEMPLATE.git
+cd BASIC_ALEXA_ASK_SKILL_TEMPLATE
+```
 
-2. **Create and activate a virtual environment:**
+2. Create a virtual environment and activate it:
 
-    ```bash
-    python -m venv .venv
-    source .venv/bin/activate  # On Windows use `.venv\Scripts\activate`
-    ```
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
 
-3. **Install the required dependencies:**
+3. Install the required packages:
 
-    ```bash
-    pip install -r requirements.txt
-    ```
+```bash
+pip install -r requirements.txt
+```
 
-5. **Set environment file**
+4. Copy `example_env` to `.env` and configure your environment variables:
 
-    Copy or rename the `example_env` file to `.env` before running
+```bash
+cp example_env .env
+```
 
-    ```bash
-    cp example_env .env
-    ```
+Edit `.env` and set the appropriate values for your configuration.
 
-## Usage
+## Configuration
 
-To run the library, use the provided `run.py` script with appropriate command-line arguments.
+Configuration settings are managed using environment variables loaded from a `.env` file. The `Config` class in `app/config/config.py` handles loading these settings.
 
-### Command Line Arguments
+## Running the Server
 
+The server is run using Gevent.
 
-### Examples
-
-To run the program:
+### Running the Server
 
 ```bash
 python run.py
 ```
-## Configuration
 
-The configuration settings are managed through environment variables and can be set in a `.env` file in the root directory of the project. 
-Example `.env` file:
+## Logging
 
-``` 
-ENV_KEY=example value
-```
-
-> [!NOTE]
-> An `example_env` file is provided to get started.  Copy the file to `.env` before running:
-
-## Shell Script
-
-A shell script run.sh is provided to automate the execution of the script.
-
-### Shell Script Examples
-
-Example `run.sh`
-
-```bash
-#!/bin/bash
-source ./.venv/bin/activate
-python ./run.py
-deactivate
-
-```
-
-### Running the Shell Script
-
-To run the script and clear the directory before running:
-
-```bash
-./run.sh
-```
+Logging is configured to provide detailed information about the server's operations. Logs include timestamps, log levels, and messages, which are crucial for debugging and monitoring.
 
 ## License
 
-This project is licensed under the MIT License. See the `LICENSE` file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Contributing
+
+If you want to contribute to this project, please fork the repository and submit a pull request with your changes.
+
+## Contact
+
+For any questions or issues, please open an issue on GitHub.
+

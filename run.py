@@ -1,8 +1,8 @@
 import asyncio
 import logging
 
-from app import CommandLine
-from app.host import Host
+from app import CommandLine, Host
+from app.helpers.template_renderer import JinjaTemplateRenderer
 
 logger = logging.getLogger(__name__)
 
@@ -23,11 +23,11 @@ def main():
     asyncio.run(main_async())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Setup logging configuration
     logging.basicConfig(
         level=logging.INFO,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     )
 
     main()

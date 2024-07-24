@@ -3,19 +3,24 @@ import os
 
 from dotenv import load_dotenv
 
-from app.models import SingletonMeta
+from app.helpers.constants import DEFAULT_SERVER_HOST, DEFAULT_SERVER_PORT
+from app.models.singleton import SingletonMeta
 
 
 class Config(metaclass=SingletonMeta):
-
     _is_initialized = False
 
     def __init__(self):
         load_dotenv()  # Load environment variables from .env file
         # Prevent re-initialization
         if not self._is_initialized:
+            self._server = None
+            self._port = None
+            self._intent = None
+            self._debug = Config.get("DEBUG", "true").lower() in ["true", "1", "t"]
             # Initialize other configuration settings here
             self.logger = logging.getLogger(__name__)
+            self._is_initialized = True
 
     @classmethod
     def initialize(cls):
@@ -26,3 +31,44 @@ class Config(metaclass=SingletonMeta):
     @staticmethod
     def get(key, default=None):
         return os.getenv(key, default)
+
+    @property
+    def server_host(self):
+        return (
+            self._server
+            if self._server
+            else self.get("SERVER_HOST", DEFAULT_SERVER_HOST)
+        )
+
+    @property
+    def server_port(self):
+        return (
+            self._port
+            if self._port
+            else int(self.get("SERVER_PORT", DEFAULT_SERVER_PORT))
+        )
+
+    @property
+    def intent(self):
+        return self._intent if self._intent else self.get("INTENT", "GenericIntent")
+
+    def set_server_host(self, host):
+        self._server = host
+
+    def set_server_port(self, port):
+        self._port = port
+
+    def set_intent(self, intent):
+        self._intent = intent
+
+    @property
+    def cert_file(self):
+        return self.get("SSL_CERTIFICATE", "certificate.pem")
+
+    @property
+    def key_file(self):
+        return self.get("SSL_PRIVATE_KEY", "private_key.pem")
+
+    @property
+    def debug(self):
+        return self._debug
