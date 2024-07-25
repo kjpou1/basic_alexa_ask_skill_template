@@ -17,6 +17,15 @@ This project is a basic template for creating an Alexa skill server using Bottle
   - [Generating a Self-Signed SSL Certificate](#generating-a-self-signed-ssl-certificate)
     - [Script: self-signed-certificate.sh](#script-self-signed-certificatesh)
     - [Instructions](#instructions)
+  - [Troubleshooting SSL Configuration](#troubleshooting-ssl-configuration)
+    - [On Ubuntu/Debian](#on-ubuntudebian)
+    - [On CentOS/RHEL](#on-centosrhel)
+    - [On macOS](#on-macos)
+    - [Updated Solution for Raspberry Pi](#updated-solution-for-raspberry-pi)
+    - [1. Upgrade `oscrypto` Package](#1-upgrade-oscrypto-package)
+      - [Method 1: Directly from GitHub](#method-1-directly-from-github)
+      - [Method 2: Using `requirements.txt`](#method-2-using-requirementstxt)
+    - [2. Use a Different Version of OpenSSL](#2-use-a-different-version-of-openssl)
   - [Running the Server](#running-the-server)
     - [Running the Server](#running-the-server-1)
   - [Request Handlers](#request-handlers)
@@ -152,6 +161,81 @@ This will create the following files:
 > [!NOTE]  
 >  Ensure the `/etc/ssl/private` directory exists before running the script. This script creates self-signed certificates for testing purposes only and is not recommended for production environments.
 
+## Troubleshooting SSL Configuration
+
+If you encounter the following error:
+```
+oscrypto.errors.LibraryNotFoundError: Error detecting the version of libcrypto
+```
+It indicates that the required cryptographic libraries are not found on your system. Follow these steps to resolve the issue:
+
+1. Ensure OpenSSL is installed.
+
+### On Ubuntu/Debian
+```bash
+sudo apt-get update
+sudo apt-get install openssl libssl-dev
+```
+
+### On CentOS/RHEL
+```bash
+sudo yum install openssl openssl-devel
+```
+
+### On macOS
+If you are using Homebrew, you can install OpenSSL as follows:
+```bash
+brew install openssl
+brew link openssl --force
+```
+
+2. Reinstall the `cryptography` library.
+```bash
+pip uninstall cryptography
+pip install cryptography
+```
+
+3. Verify OpenSSL version in Python.
+```python
+import ssl
+print(ssl.OPENSSL_VERSION)
+```
+
+### Updated Solution for Raspberry Pi
+
+To resolve the `LibraryNotFoundError` related to `libcrypto` on a Raspberry Pi, follow these steps:
+
+### 1. Upgrade `oscrypto` Package
+
+#### Method 1: Directly from GitHub
+Install the latest fixed revision of `oscrypto`:
+
+```bash
+pip install --force-reinstall https://github.com/wbond/oscrypto/archive/d5f3437ed24257895ae1edd9e503cfb352e635a8.zip
+```
+
+#### Method 2: Using `requirements.txt`
+Add the GitHub URL to your `requirements.txt`:
+
+```text
+# requirements.txt
+https://github.com/wbond/oscrypto/archive/d5f3437ed24257895ae1edd9e503cfb352e635a8.zip
+```
+
+Then run:
+
+```bash
+pip install --force-reinstall -r requirements.txt
+```
+
+### 2. Use a Different Version of OpenSSL
+
+If upgrading `oscrypto` does not work, try using OpenSSL version 3.1.x or downgrading to an earlier version like 3.0.9.
+
+For more detailed steps and information, visit the [Snowflake Community article](https://community.snowflake.com/s/article/Python-Connector-fails-to-connect-with-LibraryNotFoundError-Error-detecting-the-version-of-libcrypto).
+
+
+If you continue to experience issues, you may need to recompile Python with the correct OpenSSL paths.
 
 ## Running the Server
 
