@@ -5,8 +5,6 @@ This project is a basic template for creating an Alexa skill server using Bottle
 ## Table of Contents
 - [BASIC\_ALEXA\_ASK\_SKILL\_TEMPLATE](#basic_alexa_ask_skill_template)
   - [Table of Contents](#table-of-contents)
-  - [Important Architectural Notes](#important-architectural-notes)
-    - [Initialization Order](#initialization-order)
   - [Installation](#installation)
   - [Configuration](#configuration)
   - [Running the Server](#running-the-server)
@@ -23,13 +21,6 @@ This project is a basic template for creating an Alexa skill server using Bottle
   - [License](#license)
   - [Contributing](#contributing)
   - [Contact](#contact)
-
-## Important Architectural Notes
-
-### Initialization Order
-
-To ensure proper initialization of the `JinjaTemplateRenderer` before it is used by any request handlers, the initialization is done in the `Host.__init__` method. This is critical to avoid premature initialization by the request handlers. Any future modifications should honor this initialization order.
-
 
 ## Installation
 
