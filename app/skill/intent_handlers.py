@@ -9,6 +9,12 @@ from app.helpers.template_renderer import JinjaTemplateRenderer
 # Set up logging
 logger = logging.getLogger(__name__)
 
+# Initialize Jinja2 template renderer with YAML templates
+# Make sure this is executed before any usage in the handlers.
+JinjaTemplateRenderer.initialize(
+    template_folder="views", yaml_file="app/resources/templates.yaml"
+)
+
 
 class LaunchRequestHandler(AbstractRequestHandler):
     """Handler for Skill Launch."""

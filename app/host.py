@@ -4,7 +4,6 @@ import logging
 from gevent.pywsgi import WSGIServer
 
 from app.config.config import Config
-from app.helpers.template_renderer import JinjaTemplateRenderer
 from app.models.command_line_args import CommandLineArgs
 from app.skill.alexa import app
 
@@ -18,11 +17,6 @@ class Host:
         args (CommandLineArgs): Command line arguments passed to the script.
         """
         self.args = args
-        # Initialize Jinja2 template renderer with YAML templates
-        JinjaTemplateRenderer.initialize(
-            template_folder="views", yaml_file="app/templates.yaml"
-        )
-
         self.config = Config()
         self.logger = logging.getLogger(__name__)
 
