@@ -7,6 +7,16 @@ This project is a basic template for creating an Alexa skill server using Bottle
   - [Table of Contents](#table-of-contents)
   - [Installation](#installation)
   - [Configuration](#configuration)
+  - [Environment Variables](#environment-variables)
+    - [SERVER\_HOST](#server_host)
+    - [SERVER\_PORT](#server_port)
+    - [INTENT](#intent)
+    - [DEBUG](#debug)
+    - [SSL\_CERTIFICATE](#ssl_certificate)
+    - [SSL\_PRIVATE\_KEY](#ssl_private_key)
+  - [Generating a Self-Signed SSL Certificate](#generating-a-self-signed-ssl-certificate)
+    - [Script: self-signed-certificate.sh](#script-self-signed-certificatesh)
+    - [Instructions](#instructions)
   - [Running the Server](#running-the-server)
     - [Running the Server](#running-the-server-1)
   - [Request Handlers](#request-handlers)
@@ -58,6 +68,90 @@ Edit `.env` and set the appropriate values for your configuration.
 ## Configuration
 
 Configuration settings are managed using environment variables loaded from a `.env` file. The `Config` class in `app/config/config.py` handles loading these settings.
+
+## Environment Variables
+
+The following environment variables are used to configure the application. These should be defined in the `.env` file at the root of the project.
+
+### SERVER_HOST
+
+- **Description**: The host address on which the server will run.
+- **Default Value**: `0.0.0.0`
+- **Example**: `SERVER_HOST=0.0.0.0`
+
+### SERVER_PORT
+
+- **Description**: The port number on which the server will run.
+- **Default Value**: `8080`
+- **Example**: `SERVER_PORT=8080`
+
+### INTENT
+
+- **Description**: The custom intent to be handled by the skill.
+- **Default Value**: `HelloWorldIntent`
+- **Example**: `INTENT=HelloWorldIntent`
+
+### DEBUG
+
+- **Description**: Enables or disables debug mode.
+- **Default Value**: `true`
+- **Example**: `DEBUG=true`
+
+### SSL_CERTIFICATE
+
+- **Description**: The path to the SSL certificate file.
+- **Default Value**: `/etc/ssl/private/insecure.pem`
+- **Example**: `SSL_CERTIFICATE="/etc/ssl/private/insecure.pem"`
+
+### SSL_PRIVATE_KEY
+
+- **Description**: The path to the SSL private key file.
+- **Default Value**: `/etc/ssl/insecure.key`
+- **Example**: `SSL_PRIVATE_KEY="/etc/ssl/insecure.key"`
+
+## Generating a Self-Signed SSL Certificate
+
+For testing purposes, you can generate a self-signed SSL certificate using the provided `self-signed-certificate.sh` script. This is not recommended for production use.
+
+### Script: self-signed-certificate.sh
+
+```bash
+#!/bin/bash
+
+# Create necessary directories
+sudo mkdir -p /etc/ssl/private
+
+# Create a self signed SSL certificate.
+sudo openssl req -new -newkey rsa:4096 -x509 -days 3650 -nodes \
+             -subj /C=US/ST=NY/L=NY/O=NA/CN=localhost \
+             -keyout /etc/ssl/insecure.key -out /etc/ssl/private/insecure.pem
+
+# Create a DHParam file. Use 4096 bits instead of 2048 bits in production.
+sudo openssl dhparam -out /etc/ssl/dhparam.pem 2048
+```
+
+### Instructions
+
+1. Make the script executable:
+
+```bash
+chmod +x self-signed-certificate.sh
+```
+
+2. Run the script to generate the SSL certificate and private key:
+
+```bash
+./self-signed-certificate.sh
+```
+
+This will create the following files:
+- `/etc/ssl/insecure.key`: The private key file.
+- `/etc/ssl/private/insecure.pem`: The SSL certificate file.
+- `/etc/ssl/dhparam.pem`: The DH parameter file.
+
+> [!NOTE]  
+>  Ensure the `/etc/ssl/private` directory exists before running the script. This script creates self-signed certificates for testing purposes only and is not recommended for production environments.
+
 
 ## Running the Server
 
