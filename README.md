@@ -17,6 +17,9 @@ This project is a basic template for creating an Alexa skill server using Bottle
     - [GoodbyeIntentHandler](#goodbyeintenthandler)
     - [HelpIntentHandler](#helpintenthandler)
     - [StopIntentHandler](#stopintenthandler)
+  - [Alexa Skill Interaction Model](#alexa-skill-interaction-model)
+    - [Interaction Model Definition](#interaction-model-definition)
+    - [Explanation of the Interaction Model](#explanation-of-the-interaction-model)
   - [Logging](#logging)
   - [License](#license)
   - [Contributing](#contributing)
@@ -237,6 +240,121 @@ class StopIntentHandler(AbstractRequestHandler):
             .response
         )
 ```
+
+## Alexa Skill Interaction Model
+
+The Alexa skill is defined by an interaction model, which specifies the intents, slots, and sample utterances that the skill recognizes.
+
+### Interaction Model Definition
+
+Here is the JSON definition of the interaction model for this skill:
+
+```json
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "hello world",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "HelloWorldIntent",
+                    "slots": [
+                        {
+                            "name": "firstname",
+                            "type": "AMAZON.FirstName",
+                            "samples": [
+                                "{firstname}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "say hello to {firstname}",
+                        "{firstname}",
+                        "say hi to {firstname}",
+                        "how are you",
+                        "say hi",
+                        "hi",
+                        "say hello world",
+                        "say hello"
+                    ]
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.FallbackIntent",
+                    "samples": []
+                }
+            ],
+            "types": []
+        },
+        "dialog": {
+            "intents": [
+                {
+                    "name": "HelloWorldIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "firstname",
+                            "type": "AMAZON.FirstName",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1653396877702.19112989472"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "delegationStrategy": "ALWAYS"
+        },
+        "prompts": [
+            {
+                "id": "Elicit.Slot.1653396877702.19112989472",
+               
+
+ "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Who should I say hello to?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Tell me who to say hello to"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "What is your name"
+                    }
+                ]
+            }
+        ]
+    }
+}
+```
+
+### Explanation of the Interaction Model
+
+- **Invocation Name**: The name users say to start the skill (e.g., "Alexa, open hello world").
+- **Intents**: The actions that the skill can perform, each represented by an intent. This includes built-in intents like `AMAZON.HelpIntent` and custom intents like `HelloWorldIntent`.
+- **Slots**: Parameters that the intents can accept. In this case, `HelloWorldIntent` has a `firstname` slot of type `AMAZON.FirstName`.
+- **Samples**: Example phrases users can say to invoke each intent. These help Alexa recognize different ways users might phrase their requests.
+- **Dialog**: Defines the dialog management for the intents, including slot elicitation prompts to gather necessary information from the user.
+- **Prompts**: Predefined responses Alexa can use to prompt the user for more information.
+
 
 ## Logging
 
