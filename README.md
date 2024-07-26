@@ -153,6 +153,22 @@ chmod +x self-signed-certificate.sh
 ./self-signed-certificate.sh
 ```
 
+3. Set appropriate permissions:
+    if PermissionError: [Errno 13] Permission denied
+
+   ```bash
+   sudo chmod 644 /etc/ssl/private/insecure.pem
+   sudo chmod 644 /etc/ssl/insecure.key
+   ```
+
+4. Ensure ownership:
+    PermissionError: [Errno 13] Permission denied
+
+   ```bash
+   sudo chown $(whoami):$(whoami) /etc/ssl/private/insecure.pem
+   sudo chown $(whoami):$(whoami) /etc/ssl/insecure.key
+   ```
+  
 This will create the following files:
 - `/etc/ssl/insecure.key`: The private key file.
 - `/etc/ssl/private/insecure.pem`: The SSL certificate file.
@@ -160,6 +176,9 @@ This will create the following files:
 
 > [!NOTE]  
 >  Ensure the `/etc/ssl/private` directory exists before running the script. This script creates self-signed certificates for testing purposes only and is not recommended for production environments.
+> [!WARN]  
+>  Permissions are sometimes operating system dependent.  Follow your own permissions strategy.
+
 
 ## Troubleshooting SSL Configuration
 
